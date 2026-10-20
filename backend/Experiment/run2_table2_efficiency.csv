@@ -1,0 +1,9 @@
+model,response_time_s,tokens_per_s,vram_gb,size,mean_attempts
+nova-gemma-v3,0.69,138.87,3.08,3.9B,1.0
+exaone3.5:7.8b,1.36,97.43,9.12,7.8B,1.0
+gemma3:4b,0.98,138.55,2.88,3.9B,1.0
+gemma3:4b+guard,1.35,139.58,2.88,3.9B,1.85
+llama3.2:3b,0.6,186.79,5.98,3.2B,1.0
+nova-counseling-v2,0.45,186.54,5.98,3.2B,1.0
+nova-gemma-v3+guard,0.69,138.03,3.08,3.9B,1.09
+qwen2.5:3b,0.53,188.99,3.36,3.1B,1.0

@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova — Academic & Wellbeing Companion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Avatar / digital-human slot -->
+  <div class="avatar-panel">
+    <div class="eyebrow">Nova</div>
+
+    <div class="orb-wrap" id="orb-wrap">
+      <div class="orb" id="orb"></div>
+      <canvas id="avatar-canvas" style="display:none; width:100%; height:100%;"></canvas>
+    </div>
+
+    <div class="avatar-caption">
+      <h2>Nova</h2>
+      <p id="avatar-desc">Your academic &amp; wellbeing companion.<br>Grounded in real support resources, not judgment.</p>
+    </div>
+
+    <div class="avatar-slot-badge" id="avatar-badge">◐ digital human avatar — coming soon</div>
+
+    <div class="status-line">
+      <span class="status-dot" id="status-dot"></span>
+      <span id="status-text">checking connection…</span>
+    </div>
+
+    <button id="lang-toggle" class="avatar-slot-badge" style="position:absolute; top:28px; right:28px; cursor:pointer; background:none;">EN / 한국어</button>
+  </div>
+
+  <!-- Chat -->
+  <div class="chat-panel">
+    <div class="chat-header">
+      <h1 id="chat-title">Talk it through</h1>
+      <p id="chat-subtitle">Academic stress, career worries, or just checking in — whatever's on your mind.</p>
+    </div>
+
+    <div class="messages" id="messages">
+      <div class="empty-state" id="empty-state">
+        <h3 id="empty-title">Nothing said yet</h3>
+        <p id="empty-desc">Nova can help with exam stress, career anxiety, feeling stuck with people around you, or general academic questions.</p>
+        <div class="suggestions">
+          <button class="suggestion-chip" id="chip-exam" data-msg="I'm really stressed about my exams this week">exam stress</button>
+          <button class="suggestion-chip" id="chip-career" data-msg="I'm anxious about a job interview coming up">career anxiety</button>
+          <button class="suggestion-chip" id="chip-lonely" data-msg="I've been feeling kind of lonely lately">feeling lonely</button>
+          <button class="suggestion-chip" id="chip-study" data-msg="Can you explain recursion?">ask a study question</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="composer">
+      <textarea id="input" placeholder="Type how you're doing…" rows="1"></textarea>
+      <button id="mic-btn" title="Click to start/stop recording" aria-label="Record voice message">🎤</button>
+      <button id="send-btn">Send</button>
+    </div>
+  </div>
+
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+  import * as THREE from "three";
+  import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+
+  const API_BASE_URL = "http://localhost:8000";
+  const canvas = document.getElementById("avatar-canvas");
+  const orbEl = document.getElementById("orb");
+  const orbWrap = document.getElementById("orb-wrap");
+  const badgeEl = document.getElementById("avatar-badge");
+
+  let mixer = null;
+  let clock = new THREE.Clock();
+  let modelRoot = null;
+  let idleSpeed = 1;
+
+  // ---------- Mouth rig (set once the model loads, used every frame) ----------
+  let mouthMorphMesh = null;   // the mesh that owns the mouth blendshapes
+  let mouthMorphIndex = null;  // index of the "jawOpen" (or similar) morph target
+  let mouthFunnelIndex = null; // optional secondary shape for a rounder mouth
+  let jawBone = null;          // fallback if no morph targets exist
+
+  const MORPH_NAME_CANDIDATES = [
+    "jawOpen", "mouthOpen", "viseme_aa", "mouth_open", "MouthOpen", "A"
+  ];
+
+  // ---------- Blink rig ----------
+  let blinkMesh = null;
+  let eyeBlinkLeftIndex = null;
+  let eyeBlinkRightIndex = null;
+  let nextBlinkTime = 0;
+  let blinkProgress = 0; // 0 = eyes open, 1 = fully closed
+  let isBlinking = false;
+
+  // ---------- Audio-driven mouth animation ----------
+  let audioCtx = null;
+  let analyser = null;
+  let talkingAudioEl = null;
+
+  function playAvatarAudio(base64Audio) {
+    if (!base64Audio) return;
+
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (talkingAudioEl) {
+      talkingAudioEl.pause();
+    }
+
+    talkingAudioEl = new Audio(`data:audio/wav;base64,${base64Audio}`);
+
+    try {
+      const source = audioCtx.createMediaElementSource(talkingAudioEl);
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 256;
+      source.connect(analyser);
+      analyser.connect(audioCtx.destination);
+    } catch (err) {
+      // If routing through the analyser fails for any reason, still
+      // let the audio play - just without mouth-sync.
+      analyser = null;
+      console.warn("Audio analyser setup failed, playing without lip-sync:", err);
+    }
+
+    talkingAudioEl.play().catch(() => {
+      // Autoplay blocked - the 🔊 Replay button (see main script) is
+      // the fallback the student can click manually.
+    });
+  }
+  function setMouthOpenAmount(amount) {
+    if (mouthMorphMesh && mouthMorphIndex !== null) {
+      mouthMorphMesh.morphTargetInfluences[mouthMorphIndex] = amount;
+      if (mouthFunnelIndex !== null) {
+        mouthMorphMesh.morphTargetInfluences[mouthFunnelIndex] = amount * 0.3;
+      }
+    } else if (jawBone) {
+      jawBone.rotation.x = amount * 0.25;
+    }
+  }
+
+  function updateMouthFromAudio() {
+    if (!analyser || !talkingAudioEl || talkingAudioEl.paused) {
+      setMouthOpenAmount(0);
+      return;
+    }
+
+    const data = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteTimeDomainData(data);
+
+    let sumSquares = 0;
+    for (let i = 0; i < data.length; i++) {
+      const v = (data[i] - 128) / 128;
+      sumSquares += v * v;
+    }
+    const rms = Math.sqrt(sumSquares / data.length);
+    const openAmount = Math.min(1, rms * 4);
+
+    setMouthOpenAmount(openAmount);
+  }
+
+  // Randomized, natural-feeling blinking - not a fixed interval, so
+  // it doesn't look mechanical. Each blink is a fast close-then-open
+  // (~150ms), followed by a random 2-6 second gap before the next one.
+  function updateBlink(elapsedTime) {
+    if (!blinkMesh) return;
+
+    if (!isBlinking && elapsedTime >= nextBlinkTime) {
+      isBlinking = true;
+      blinkProgress = 0;
+    }
+
+    if (isBlinking) {
+      blinkProgress += 0.18;
+      const closeAmount = blinkProgress <= 1
+        ? Math.sin(Math.min(blinkProgress, 1) * Math.PI)
+        : 0;
+
+      blinkMesh.morphTargetInfluences[eyeBlinkLeftIndex] = closeAmount;
+      blinkMesh.morphTargetInfluences[eyeBlinkRightIndex] = closeAmount;
+
+      if (blinkProgress >= 1) {
+        isBlinking = false;
+        nextBlinkTime = elapsedTime + 2 + Math.random() * 4;
+      }
+    }
+  }
+
+  function initAvatar() {
+    const width = orbWrap.clientWidth;
+    const height = orbWrap.clientHeight;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(35, width / height, 0.1, 100);
+    camera.position.set(0, 1.4, 3);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    const ambient = new THREE.AmbientLight(0xffffff, 0.7);
+    const key = new THREE.DirectionalLight(0xf0a860, 1.1);
+    key.position.set(2, 3, 2);
+    const rim = new THREE.DirectionalLight(0x8fc0a3, 0.5);
+    rim.position.set(-2, 1, -2);
+    scene.add(ambient, key, rim);
+
+    // ─── THE SWITCH ───────────────────────────────────────────────
+    // true  = drag mode: rotate/zoom with the mouse to find a shot
+    // false = locked mode: mouse does nothing, camera stays fixed
+    const ENABLE_DRAG_CONTROLS = false;
+
+    const CAMERA_POSITION = [0.0044516958106814, 7.65773052675029, 3.8669779420132415];
+    const CAMERA_TARGET = [0.0044516958106866, 7.461967914898937, -0.045037813552561534];
+    // ───────────────────────────────────────────────────────────────
+
+    const loader = new GLTFLoader();
+    loader.load(
+      `${API_BASE_URL}/static/avatar/guytest.glb`,
+      (gltf) => {
+        modelRoot = gltf.scene;
+        scene.add(modelRoot);
+
+        // Find the mouth rig and blink rig once, up front.
+        modelRoot.traverse((obj) => {
+          if (!mouthMorphMesh && obj.isMesh && obj.morphTargetDictionary) {
+            for (const name of MORPH_NAME_CANDIDATES) {
+              if (name in obj.morphTargetDictionary) {
+                mouthMorphMesh = obj;
+                mouthMorphIndex = obj.morphTargetDictionary[name];
+                if ("mouthFunnel" in obj.morphTargetDictionary) {
+                  mouthFunnelIndex = obj.morphTargetDictionary["mouthFunnel"];
+                }
+                console.log("Using morph target for mouth:", name);
+                break;
+              }
+            }
+          }
+          if (!mouthMorphMesh && !jawBone && obj.isBone && /jaw/i.test(obj.name)) {
+            jawBone = obj;
+            console.log("Using jaw bone for mouth:", obj.name);
+          }
+          if (!blinkMesh && obj.isMesh && obj.morphTargetDictionary) {
+            if ("eyeBlinkLeft" in obj.morphTargetDictionary && "eyeBlinkRight" in obj.morphTargetDictionary) {
+              blinkMesh = obj;
+              eyeBlinkLeftIndex = obj.morphTargetDictionary["eyeBlinkLeft"];
+              eyeBlinkRightIndex = obj.morphTargetDictionary["eyeBlinkRight"];
+              console.log("Found blink targets on", obj.name);
+            }
+          }
+        });
+        if (!mouthMorphMesh && !jawBone) {
+          console.warn("No mouth rig found on this model - mouth will not animate.");
+        }
+        if (!blinkMesh) {
+          console.warn("No blink targets found on this model - eyes will not blink.");
+        } else {
+          // Schedule the very first blink a couple seconds after load,
+          // not instantly.
+          nextBlinkTime = clock.getElapsedTime() + 2 + Math.random() * 3;
+        }
+
+        let box = new THREE.Box3().setFromObject(modelRoot);
+        let size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+        modelRoot.scale.setScalar(1.8 / maxDim);
+
+        box = new THREE.Box3().setFromObject(modelRoot);
+        const center = box.getCenter(new THREE.Vector3());
+        modelRoot.position.x -= center.x;
+        modelRoot.position.z -= center.z;
+        modelRoot.position.y -= box.min.y;
+
+        box = new THREE.Box3().setFromObject(modelRoot);
+        const sphere = box.getBoundingSphere(new THREE.Sphere());
+        camera.near = 0.01;
+
+        if (gltf.animations && gltf.animations.length > 0) {
+          mixer = new THREE.AnimationMixer(modelRoot);
+          const idleClip = gltf.animations.find(a => /idle/i.test(a.name)) || gltf.animations[0];
+          mixer.clipAction(idleClip).play();
+        }
+
+        orbEl.style.display = "none";
+        canvas.style.display = "block";
+        if (badgeEl) badgeEl.style.display = "none";
+
+        if (ENABLE_DRAG_CONTROLS) {
+          const startDist = sphere.radius * 3;
+          camera.position.set(0, sphere.center.y, startDist);
+          camera.lookAt(0, sphere.center.y, 0);
+          camera.updateProjectionMatrix();
+
+          import("three/addons/controls/OrbitControls.js").then(({ OrbitControls }) => {
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.target.set(0, sphere.center.y, 0);
+            controls.minDistance = sphere.radius * 0.3;
+            controls.maxDistance = sphere.radius * 6;
+            controls.update();
+
+            window.addEventListener("keydown", (e) => {
+              if (e.key === "p") {
+                console.log("CAMERA_POSITION =", camera.position.toArray());
+                console.log("CAMERA_TARGET =", controls.target.toArray());
+              }
+            });
+
+            function controlsLoop() {
+              requestAnimationFrame(controlsLoop);
+              controls.update();
+            }
+            controlsLoop();
+          });
+        } else {
+          camera.position.set(...CAMERA_POSITION);
+          camera.lookAt(...CAMERA_TARGET);
+          camera.updateProjectionMatrix();
+        }
+
+        animate();
+      },
+      undefined,
+      (err) => {
+        console.warn("Avatar model failed to load, falling back to orb:", err);
+      }
+    );
+
+    function animate() {
+      requestAnimationFrame(animate);
+      const delta = clock.getDelta();
+      if (mixer) mixer.update(delta * idleSpeed);
+      updateMouthFromAudio();
+      updateBlink(clock.getElapsedTime());
+      renderer.render(scene, camera);
+    }
+
+    window.addEventListener("resize", () => {
+      const w = orbWrap.clientWidth;
+      const h = orbWrap.clientHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    });
+  }
+
+  initAvatar();
+
+  // Exposed for the main script below (which is NOT a module, so it
+  // can't `import` these directly) to nudge idle animation speed and
+  // to trigger lip-synced audio playback from one shared function.
+  window.setAvatarThinking = (isThinking) => {
+    idleSpeed = isThinking ? 2.2 : 1;
+  };
+  window.playAvatarAudio = playAvatarAudio;
+</script>
+
+<script>
+  // Point this at your running backend. Defaults to local dev.
+  const API_BASE_URL = "http://localhost:8000";
+
+  const messagesEl = document.getElementById("messages");
+  const emptyState = document.getElementById("empty-state");
+  const inputEl = document.getElementById("input");
+  const sendBtn = document.getElementById("send-btn");
+  const micBtn = document.getElementById("mic-btn");
+  const langToggle = document.getElementById("lang-toggle");
+  const orb = document.getElementById("orb");
+  const statusDot = document.getElementById("status-dot");
+  const statusText = document.getElementById("status-text");
+
+  // ---------- Language ----------
+  let currentLanguage = localStorage.getItem("nova_language") || "en";
+  let connectionState = "checking"; // "checking" | "connected" | "offline"
+
+  const TRANSLATIONS = {
+    en: {
+      chatTitle: "Talk it through",
+      chatSubtitle: "Academic stress, career worries, or just checking in — whatever's on your mind.",
+      avatarDesc: "Your academic &amp; wellbeing companion.<br>Grounded in real support resources, not judgment.",
+      avatarBadge: "◐ digital human avatar — coming soon",
+      emptyTitle: "Nothing said yet",
+      emptyDesc: "Nova can help with exam stress, career anxiety, feeling stuck with people around you, or general academic questions.",
+      chipExam: "exam stress",
+      chipCareer: "career anxiety",
+      chipLonely: "feeling lonely",
+      chipStudy: "ask a study question",
+      msgExam: "I'm really stressed about my exams this week",
+      msgCareer: "I'm anxious about a job interview coming up",
+      msgLonely: "I've been feeling kind of lonely lately",
+      msgStudy: "Can you explain recursion?",
+      sendBtn: "Send",
+      placeholder: "Type how you're doing…",
+      statusConnected: "connected",
+      statusChecking: "checking connection…",
+      statusOffline: "backend not reachable — is uvicorn running?",
+      toggleLabel: "EN / 한국어",
+    },
+    ko: {
+      chatTitle: "이야기해 보세요",
+      chatSubtitle: "학업 스트레스, 진로 고민, 아니면 그냥 안부여도 괜찮아요 — 무엇이든 편하게 말해보세요.",
+      avatarDesc: "당신의 학업 및 마음 건강 동반자.<br>실제 지원 자료에 근거하며, 판단하지 않아요.",
+      avatarBadge: "◐ 디지털 휴먼 아바타 — 준비 중",
+      emptyTitle: "아직 대화가 없어요",
+      emptyDesc: "시험 스트레스, 진로 불안, 주변 사람들과의 관계, 또는 학업 관련 질문까지 Nova가 도와드릴 수 있어요.",
+      chipExam: "시험 스트레스",
+      chipCareer: "진로 불안",
+      chipLonely: "외로움",
+      chipStudy: "학업 질문하기",
+      msgExam: "이번 주 시험 때문에 너무 스트레스 받아요",
+      msgCareer: "다가오는 면접 때문에 불안해요",
+      msgLonely: "요즘 좀 외로운 것 같아요",
+      msgStudy: "재귀(recursion)에 대해 설명해 줄 수 있어요?",
+      sendBtn: "보내기",
+      placeholder: "지금 기분이 어떤지 적어보세요…",
+      statusConnected: "연결됨",
+      statusChecking: "연결 확인 중…",
+      statusOffline: "백엔드에 연결할 수 없어요 — uvicorn이 실행 중인가요?",
+      toggleLabel: "한국어 / EN",
+    },
+  };
+
+  function renderStatus() {
+    const t = TRANSLATIONS[currentLanguage];
+    statusDot.classList.toggle("offline", connectionState === "offline");
+    statusText.textContent =
+      connectionState === "connected" ? t.statusConnected :
+      connectionState === "offline" ? t.statusOffline :
+      t.statusChecking;
+  }
+
+  function applyLanguage() {
+    const t = TRANSLATIONS[currentLanguage];
+
+    langToggle.textContent = t.toggleLabel;
+    inputEl.placeholder = t.placeholder;
+    sendBtn.textContent = t.sendBtn;
+    document.getElementById("chat-title").textContent = t.chatTitle;
+    document.getElementById("chat-subtitle").textContent = t.chatSubtitle;
+    document.getElementById("avatar-desc").innerHTML = t.avatarDesc;
+    document.getElementById("avatar-badge").textContent = t.avatarBadge;
+
+    const emptyTitleEl = document.getElementById("empty-title");
+    if (emptyTitleEl) {
+      emptyTitleEl.textContent = t.emptyTitle;
+      document.getElementById("empty-desc").textContent = t.emptyDesc;
+
+      const chipExam = document.getElementById("chip-exam");
+      const chipCareer = document.getElementById("chip-career");
+      const chipLonely = document.getElementById("chip-lonely");
+      const chipStudy = document.getElementById("chip-study");
+      chipExam.textContent = t.chipExam;
+      chipExam.dataset.msg = t.msgExam;
+      chipCareer.textContent = t.chipCareer;
+      chipCareer.dataset.msg = t.msgCareer;
+      chipLonely.textContent = t.chipLonely;
+      chipLonely.dataset.msg = t.msgLonely;
+      chipStudy.textContent = t.chipStudy;
+      chipStudy.dataset.msg = t.msgStudy;
+    }
+
+    renderStatus();
+  }
+
+  langToggle.addEventListener("click", () => {
+    currentLanguage = currentLanguage === "ko" ? "en" : "ko";
+    localStorage.setItem("nova_language", currentLanguage);
+    applyLanguage();
+  });
+
+  applyLanguage();
+
+  function getSessionId() {
+    let id = localStorage.getItem("nova_session_id");
+    if (!id) {
+      id = crypto.randomUUID();
+      localStorage.setItem("nova_session_id", id);
+    }
+    return id;
+  }
+
+  const CALM_EMOTIONS = new Set(["neutral", "hopeful"]);
+
+  function setOrbState(emotion) {
+    orb.classList.remove("state-calm", "state-thinking");
+    if (emotion && CALM_EMOTIONS.has(emotion)) {
+      orb.classList.add("state-calm");
+    }
+  }
+
+  function setThinking(isThinking) {
+    orb.classList.toggle("state-thinking", isThinking);
+    if (window.setAvatarThinking) window.setAvatarThinking(isThinking);
+  }
+
+  function addMessage(role, text, tag) {
+    if (emptyState) emptyState.remove();
+    const div = document.createElement("div");
+    div.className = "msg " + role;
+    div.textContent = text;
+    if (tag) {
+      const tagEl = document.createElement("div");
+      tagEl.className = "msg-tag";
+      tagEl.textContent = tag;
+      div.appendChild(tagEl);
+    }
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    return div;
+  }
+
+  function addSystemNote(text) {
+    if (emptyState) emptyState.remove();
+    const div = document.createElement("div");
+    div.className = "msg system-note";
+    div.textContent = text;
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  async function checkHealth() {
+    try {
+      const res = await fetch(`${API_BASE_URL}/health`);
+      connectionState = res.ok ? "connected" : "offline";
+    } catch (e) {
+      connectionState = "offline";
+    }
+    renderStatus();
+  }
+
+  // ---------- RL feedback (thumbs up/down) ----------
+  function addFeedbackButtons(bubble, feedbackId) {
+    const row = document.createElement("div");
+    row.className = "feedback-row";
+
+    const upBtn = document.createElement("button");
+    upBtn.className = "feedback-btn";
+    upBtn.textContent = "👍";
+    upBtn.setAttribute("aria-label", "This was helpful");
+
+    const downBtn = document.createElement("button");
+    downBtn.className = "feedback-btn";
+    downBtn.textContent = "👎";
+    downBtn.setAttribute("aria-label", "This wasn't helpful");
+
+    upBtn.addEventListener("click", () => sendFeedback(feedbackId, true, upBtn, downBtn));
+    downBtn.addEventListener("click", () => sendFeedback(feedbackId, false, downBtn, upBtn));
+
+    row.appendChild(upBtn);
+    row.appendChild(downBtn);
+    bubble.appendChild(row);
+  }
+
+  async function sendFeedback(feedbackId, helpful, clickedBtn, otherBtn) {
+    clickedBtn.disabled = true;
+    otherBtn.disabled = true;
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/feedback/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ feedback_id: feedbackId, helpful }),
+      });
+
+      if (!res.ok) throw new Error(`Server responded ${res.status}`);
+
+      clickedBtn.classList.add("selected", helpful ? "up" : "down");
+    } catch (err) {
+      clickedBtn.disabled = false;
+      otherBtn.disabled = false;
+    }
+  }
+
+  // audioBase64 (2nd arg) is only present for VOICE replies, passed in
+  // directly by sendVoiceMessage. Typed replies carry their audio
+  // inside data.audio_base64 instead - both paths are normalized to
+  // the same variable below so the rest of the function doesn't care
+  // which one it came from.
+  function renderNovaReply(data, audioBase64) {
+    const tag = data.emotion
+      ? `${data.emotion} · ${data.stress_type || "general"}`
+      : null;
+
+    const bubble = addMessage("nova", data.reply, tag);
+    const resolvedAudio = audioBase64 || data.audio_base64 || null;
+
+    if (resolvedAudio) {
+      const playBtn = document.createElement("button");
+      playBtn.textContent = "🔊 Replay";
+      playBtn.style.cssText =
+        "margin-top:8px;display:block;background:none;border:1px solid var(--border);" +
+        "color:var(--text-muted);border-radius:100px;padding:4px 10px;font-size:11px;cursor:pointer;";
+      playBtn.addEventListener("click", () => playBase64Wav(resolvedAudio));
+      bubble.appendChild(playBtn);
+    }
+
+    if (data.feedback_id != null) {
+      addFeedbackButtons(bubble, data.feedback_id);
+    }
+
+    setOrbState(data.emotion);
+
+    if (data.risk_flag) {
+      addSystemNote("Nova shared some support resources above — please take a look.");
+    }
+
+    return resolvedAudio;
+  }
+
+  // Routes through the 3D avatar's lip-sync playback when the avatar
+  // has loaded (window.playAvatarAudio, set by the module script
+  // above); falls back to plain playback if the avatar isn't ready
+  // yet or failed to load, so audio still works either way.
+  function playBase64Wav(base64Audio) {
+    if (!base64Audio) return;
+
+    if (window.playAvatarAudio) {
+      window.playAvatarAudio(base64Audio);
+      return;
+    }
+
+    const audio = new Audio(`data:audio/wav;base64,${base64Audio}`);
+    audio.play().catch(() => {
+      // Autoplay blocked - the 🔊 Replay button is the fallback.
+    });
+  }
+
+  async function sendMessage(text) {
+    if (!text.trim()) return;
+
+    addMessage("user", text);
+    inputEl.value = "";
+    inputEl.style.height = "auto";
+    sendBtn.disabled = true;
+    setThinking(true);
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/chat/counseling`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text, language: currentLanguage }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Server responded ${res.status}`);
+      }
+
+      const data = await res.json();
+      const resolvedAudio = renderNovaReply(data);
+      if (resolvedAudio) playBase64Wav(resolvedAudio);
+    } catch (err) {
+      addSystemNote(
+        "Couldn't reach Nova right now. Make sure the backend is running " +
+        `(uvicorn app:app --reload) and reachable at ${API_BASE_URL}.`
+      );
+    } finally {
+      sendBtn.disabled = false;
+      setThinking(false);
+      inputEl.focus();
+    }
+  }
+
+  // ---------- Voice (mic) ----------
+
+  let mediaRecorder = null;
+  let audioChunks = [];
+  let isRecording = false;
+
+  async function startRecording() {
+    let stream;
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch (err) {
+      addSystemNote("Couldn't access your microphone — check your browser's permission settings.");
+      return;
+    }
+
+    audioChunks = [];
+    mediaRecorder = new MediaRecorder(stream);
+
+    mediaRecorder.ondataavailable = (e) => {
+      if (e.data.size > 0) audioChunks.push(e.data);
+    };
+
+    mediaRecorder.onstop = () => {
+      stream.getTracks().forEach((track) => track.stop());
+      const blob = new Blob(audioChunks, { type: "audio/webm" });
+      sendVoiceMessage(blob);
+    };
+
+    mediaRecorder.start();
+    isRecording = true;
+    micBtn.classList.add("recording");
+    micBtn.textContent = "⏹";
+  }
+
+  function stopRecording() {
+    if (mediaRecorder && isRecording) {
+      mediaRecorder.stop();
+      isRecording = false;
+      micBtn.classList.remove("recording");
+    }
+  }
+
+  async function sendVoiceMessage(audioBlob) {
+    micBtn.classList.add("processing");
+    micBtn.textContent = "…";
+    sendBtn.disabled = true;
+    setThinking(true);
+
+    const formData = new FormData();
+    formData.append("audio", audioBlob, "recording.webm");
+    formData.append("session_id", getSessionId());
+    formData.append("language", currentLanguage);
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/voice/chat`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        throw new Error(`Server responded ${res.status}`);
+      }
+
+      const data = await res.json();
+
+      if (!data.transcript) {
+        addSystemNote("Didn't catch that — try recording again.");
+        return;
+      }
+
+      addMessage("user", data.transcript);
+      const resolvedAudio = renderNovaReply(data, data.audio_base64);
+      if (resolvedAudio) playBase64Wav(resolvedAudio);
+
+      if (data.audio_error) {
+        addSystemNote("Voice reply text is above, but speech playback failed — check the backend logs.");
+      }
+      if (data.tts_language_warning && !sessionStorage.getItem("nova_ko_voice_warned")) {
+        addSystemNote(data.tts_language_warning);
+        sessionStorage.setItem("nova_ko_voice_warned", "1");
+      }
+    } catch (err) {
+      addSystemNote(
+        "Couldn't reach Nova right now. Make sure the backend is running " +
+        `(uvicorn app:app --reload) and reachable at ${API_BASE_URL}.`
+      );
+    } finally {
+      micBtn.classList.remove("processing");
+      micBtn.textContent = "🎤";
+      sendBtn.disabled = false;
+      setThinking(false);
+    }
+  }
+
+  micBtn.addEventListener("click", () => {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+  });
+
+  sendBtn.addEventListener("click", () => sendMessage(inputEl.value));
+
+  inputEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage(inputEl.value);
+    }
+  });
+
+  inputEl.addEventListener("input", () => {
+    inputEl.style.height = "auto";
+    inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + "px";
+  });
+
+  document.querySelectorAll(".suggestion-chip").forEach((chip) => {
+    chip.addEventListener("click", () => sendMessage(chip.dataset.msg));
+  });
+
+  checkHealth();
+</script>
+
+</body>
+</html>

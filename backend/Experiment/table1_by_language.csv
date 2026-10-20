@@ -1,0 +1,6 @@
+model,en,ko
+exaone3.5:7.8b,0.417,0.417
+gemma3:4b,0.708,0.792
+llama3.2:3b,0.583,0.542
+nova-counseling-v2,0.292,0.375
+qwen2.5:3b,0.5,0.542
