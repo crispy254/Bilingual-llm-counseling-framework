@@ -1,17 +1,9 @@
-cat > .gitignore << 'EOF'
-node_modules/
-__pycache__/
-*.pyc
-.env
-.venv/
 venv/
-dist/
-build/
-chroma_store/
+__pycache__/
+.env
+*.pkl
 *.gguf
 *.safetensors
-*.bin
-*.pt
-*.db
-*.sqlite3
-EOF
+chroma_store/
+app.db
+node_modules/
