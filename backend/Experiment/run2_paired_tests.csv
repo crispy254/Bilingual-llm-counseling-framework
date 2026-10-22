@@ -2,8 +2,7 @@ model_a,model_b,n,acc_a,acc_b,only_a_correct,only_b_correct,p_value
 nova-gemma-v3,gemma3:4b,144,0.868,0.722,33,12,0.0025
 nova-gemma-v3+guard,nova-gemma-v3,144,0.917,0.868,8,1,0.0391
 nova-gemma-v3+guard,gemma3:4b+guard,144,0.917,0.75,30,6,0.0001
-nova-gemma-v3,nova-counseling-v2,144,0.868,0.875,14,15,1.0
-nova-gemma-v3,llama3.2:3b,144,0.868,0.451,69,9,0.0
+nova-gemma-v3,nova-counseling-v2,144,0.868,0.875,14,15,1
+nova-gemma-v3,llama3.2:3b,144,0.868,0.451,69,9,0
 gemma3:4b+guard,gemma3:4b,144,0.75,0.722,11,7,0.4807
-gemma3:4b,llama3.2:3b,144,0.722,0.451,50,11,0.0
-llama3.2:3b,nova-counseling-v2,144,0.451,0.875,5,66,0.0
+gemma3:4b,llama3.2:3b,144,0.722,0.451,50,11,0

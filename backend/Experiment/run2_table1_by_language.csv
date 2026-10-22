@@ -2,8 +2,6 @@ model,en,ko
 exaone3.5:7.8b,0.333,0.389
 gemma3:4b,0.653,0.792
 gemma3:4b+guard,0.708,0.792
-llama3.2:3b,0.458,0.444
-nova-counseling-v2,0.861,0.889
-nova-gemma-v3,0.917,0.819
-nova-gemma-v3+guard,0.917,0.917
+ours-gemma-v3,0.917,0.819
+ours-gemma-v3+guard,0.917,0.917
 qwen2.5:3b,0.347,0.444

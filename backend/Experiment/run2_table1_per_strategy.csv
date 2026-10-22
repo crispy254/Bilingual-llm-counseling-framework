@@ -1,7 +1,7 @@
 model,strategy,precision,recall,f1,support
-exaone3.5:7.8b,validate_listen,1.0,0.028,0.054,36
+exaone3.5:7.8b,validate_listen,1,0.028,0.054,36
 exaone3.5:7.8b,validate_ask,0.571,0.333,0.421,36
-exaone3.5:7.8b,validate_suggest,0.305,1.0,0.468,36
+exaone3.5:7.8b,validate_suggest,0.305,1,0.468,36
 exaone3.5:7.8b,validate_normalize,0.75,0.083,0.15,36
 gemma3:4b,validate_listen,0.875,0.778,0.824,36
 gemma3:4b,validate_ask,0.714,0.972,0.824,36
@@ -30,4 +30,4 @@ nova-gemma-v3+guard,validate_normalize,0.854,0.972,0.909,36
 qwen2.5:3b,validate_listen,0.833,0.139,0.238,36
 qwen2.5:3b,validate_ask,0.606,0.556,0.58,36
 qwen2.5:3b,validate_suggest,0.323,0.889,0.474,36
-qwen2.5:3b,validate_normalize,0.0,0.0,0.0,36
+qwen2.5:3b,validate_normalize,0,0,0,36
