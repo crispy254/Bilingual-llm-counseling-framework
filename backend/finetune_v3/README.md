@@ -1,17 +1,38 @@
-# nova-gemma-v3: strategy-conditioned fine-tuning (Gemma 3 4B base)
+# Bilingual LLM Counseling Framework
 
-Place this folder at `backend/finetune_v3/`. Run commands from inside it.
+This repository contains the system implementation and supporting experimental resources for the research article:
 
-1. Download ESConv: https://github.com/thu-coai/Emotional-Support-Conversation (file `ESConv.json`) into this folder.
-2. Pull helper models (already used in the experiment): `ollama pull gemma3:4b` and `ollama pull qwen3:4b`.
-3. Build the retrieval index if you have not: `python ../rag.py` (from backend/).
-4. Data:
-   - `python build_strategy_dataset.py testset --per-context 3`   -> prompts_v2.csv (144 NEW test messages; review by hand)
-   - `python build_strategy_dataset.py esconv --esconv ESConv.json`
-   - `python build_strategy_dataset.py synth --msgs-per-context 15`   (slow; re-run adds more data)
-   - `python build_strategy_dataset.py merge`
-   Inspect 30 random lines of strategy_train.jsonl yourself before training.
-5. Train: `python finetune_v3.py --max-steps 20` (smoke test), then `python finetune_v3.py` (Gemma 3 4B -> nova-gemma-v3; use `--family llama` for Llama 3.2 3B).
-   Then import it into Ollama as printed at the end of the script (base the Modelfile on `ollama show gemma3:4b --modelfile`, change only FROM).
-6. Evaluate: in Experiment/exp_config.py, uncomment `nova-gemma-v3` and `nova-gemma-v3+guard` in MODELS, then re-run run_generation.py, run_judging.py, analyze.py (finished models are skipped).
-Do not change the data or prompts after you have looked at the test results.
+**A Bilingual RAG-Grounded Counseling Framework with Feedback-Driven Contextual Bandit Adaptation for University Students**
+
+Our framework integrates a locally deployed large language model (LLM), retrieval-augmented generation (RAG), strategy-conditioned fine-tuning, and feedback-driven contextual bandit adaptation to provide bilingual (English and Korean) counseling support for university students.
+
+## Naming Clarification
+
+**Nova** is the internal development name of the counseling system. In the accompanying MDPI manuscript, the system is referred to as **"our system"** or **"our framework"** rather than Nova.
+
+Internal filenames, model identifiers, and directories retain the original Nova naming convention.
+
+## Repository Structure
+
+The project is organized into two main components:
+
+- **Frontend:** Contains the user interface of the counseling application.
+- **Backend:** Contains the core system implementation, including LLM integration, retrieval-augmented generation (RAG), counseling logic, and feedback-driven adaptation.
+
+The backend also contains two important research directories:
+
+- **`backend/finetune_v3/`** — Contains the strategy-conditioned fine-tuning implementation, dataset preparation scripts, and model training resources.
+- **`backend/Experiment/`** — Contains the experimental evaluation scripts, model comparison configurations, and supporting evaluation resources used in the study.
+
+## Code and Data Availability
+
+This repository accompanies the MDPI manuscript and contains the counseling system implementation, fine-tuning scripts, and supporting experimental resources.
+
+The general counseling datasets used in this study—**CounselChat, Amod Mental Health Counseling Conversations, ESConv, MentalChat16K, Dolly-15k, and Career Guidance QA**—are publicly available from their respective original sources.
+
+Additional implementation files, experimental resources, and documentation may be incorporated as the repository is finalized.
+## Associated Publication
+
+*A Bilingual RAG-Grounded Counseling Framework with Feedback-Driven Contextual Bandit Adaptation for University Students.*
+
+Manuscript prepared for submission to an MDPI journal.
