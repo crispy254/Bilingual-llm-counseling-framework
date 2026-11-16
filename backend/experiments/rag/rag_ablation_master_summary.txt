@@ -1,0 +1,17 @@
+RAG ABLATION MASTER EVALUATION SUMMARY
+Judge model: phi4:14b
+Paired messages: 144
+RAG-on relevance mean: 3.1042
+RAG-off relevance mean: 3.0278
+Mean paired difference (RAG-on minus RAG-off): 0.0764
+95% bootstrap CI: [-0.0347, 0.1875]
+Paired Cohen's dz: 0.1140
+Wilcoxon statistic: 342.0; p-value: 0.13701176315429206
+RAG-on better / tie / RAG-off better: 27 / 102 / 15
+
+Interpretation note: positive differences favour RAG-on; negative differences favour RAG-off.
+Response relevance is blind: the judge receives only the user message and response.
+Retrieval relevance is a set-level judgement of the stored context, not per passage.
+Faithfulness is judged separately using response claims against stored context.
+Automatic judge outputs are not human-validated unless a separate validation study is performed.
+The ablation's retrieval procedure may differ from production intent-specific retrieval; describe this in the paper.

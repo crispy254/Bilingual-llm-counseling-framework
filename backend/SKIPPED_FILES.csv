@@ -1,0 +1,56 @@
+original_path,reason
+routers\__pycache__\chatbot.cpython-311.pyc,excluded file type
+routers\__pycache__\chatbot.cpython-314.pyc,excluded file type
+routers\__pycache__\feedback.cpython-311.pyc,excluded file type
+routers\__pycache__\feedback.cpython-314.pyc,excluded file type
+routers\__pycache__\materials.cpython-311.pyc,excluded file type
+routers\__pycache__\materials.cpython-314.pyc,excluded file type
+routers\__pycache__\pastpapers.cpython-311.pyc,excluded file type
+routers\__pycache__\pastpapers.cpython-314.pyc,excluded file type
+routers\__pycache__\projects.cpython-311.pyc,excluded file type
+routers\__pycache__\projects.cpython-314.pyc,excluded file type
+routers\__pycache__\resources.cpython-311.pyc,excluded file type
+routers\__pycache__\resources.cpython-314.pyc,excluded file type
+routers\__pycache__\scholarships.cpython-311.pyc,excluded file type
+routers\__pycache__\scholarships.cpython-314.pyc,excluded file type
+routers\__pycache__\upload.cpython-311.pyc,excluded file type
+routers\__pycache__\upload.cpython-314.pyc,excluded file type
+routers\__pycache__\users.cpython-311.pyc,excluded file type
+routers\__pycache__\users.cpython-314.pyc,excluded file type
+routers\__pycache__\voice.cpython-311.pyc,excluded file type
+routers\__pycache__\voice.cpython-314.pyc,excluded file type
+services\__pycache__\chatbot_service.cpython-311.pyc,excluded file type
+services\__pycache__\chatbot_service.cpython-314.pyc,excluded file type
+services\__pycache__\project_service.cpython-311.pyc,excluded file type
+services\__pycache__\resources_service.cpython-311.pyc,excluded file type
+services\__pycache__\scholarship_service.cpython-311.pyc,excluded file type
+services\__pycache__\upload_service.cpython-311.pyc,excluded file type
+services\__pycache__\users_service.cpython-311.pyc,excluded file type
+voice\__pycache__\stt.cpython-311.pyc,excluded file type
+voice\__pycache__\stt.cpython-314.pyc,excluded file type
+voice\__pycache__\tts.cpython-311.pyc,excluded file type
+voice\__pycache__\tts.cpython-314.pyc,excluded file type
+voice\__pycache__\__init__.cpython-311.pyc,excluded file type
+voice\__pycache__\__init__.cpython-314.pyc,excluded file type
+Experiment\adaptation\sim_results.pkl,excluded file type
+Experiment\adaptation\__pycache__\simulate_adaptation.cpython-314.pyc,excluded file type
+Experiment\rag_exp\embedding_cache.pkl,excluded file type
+Experiment\rag_exp\original_chroma\00566387-32bc-44dc-ba5e-1e88517eb1a6\data_level0.bin,excluded folder
+Experiment\rag_exp\original_chroma\00566387-32bc-44dc-ba5e-1e88517eb1a6\header.bin,excluded folder
+Experiment\rag_exp\original_chroma\00566387-32bc-44dc-ba5e-1e88517eb1a6\length.bin,excluded folder
+Experiment\rag_exp\original_chroma\00566387-32bc-44dc-ba5e-1e88517eb1a6\link_lists.bin,excluded folder
+Experiment\rag_exp\original_chroma\63f0e4be-b941-400d-88a6-af2888c9cae7\data_level0.bin,excluded folder
+Experiment\rag_exp\original_chroma\63f0e4be-b941-400d-88a6-af2888c9cae7\header.bin,excluded folder
+Experiment\rag_exp\original_chroma\63f0e4be-b941-400d-88a6-af2888c9cae7\length.bin,excluded folder
+Experiment\rag_exp\original_chroma\63f0e4be-b941-400d-88a6-af2888c9cae7\link_lists.bin,excluded folder
+Experiment\rag_exp\original_chroma\c3bdde28-2de6-454f-8a6a-a075cb83ba87\data_level0.bin,excluded folder
+Experiment\rag_exp\original_chroma\c3bdde28-2de6-454f-8a6a-a075cb83ba87\header.bin,excluded folder
+Experiment\rag_exp\original_chroma\c3bdde28-2de6-454f-8a6a-a075cb83ba87\length.bin,excluded folder
+Experiment\rag_exp\original_chroma\c3bdde28-2de6-454f-8a6a-a075cb83ba87\link_lists.bin,excluded folder
+Experiment\rag_exp\original_chroma\chroma.sqlite3,excluded file type
+Experiment\rag_exp\original_chroma\daf3eed2-4609-4016-a5a8-5531cc86c04d\data_level0.bin,excluded folder
+Experiment\rag_exp\original_chroma\daf3eed2-4609-4016-a5a8-5531cc86c04d\header.bin,excluded folder
+Experiment\rag_exp\original_chroma\daf3eed2-4609-4016-a5a8-5531cc86c04d\length.bin,excluded folder
+Experiment\rag_exp\original_chroma\daf3eed2-4609-4016-a5a8-5531cc86c04d\link_lists.bin,excluded folder
+Experiment\rag_ablation_judged_v2_checkpoint.sqlite3,excluded file type
+Experiment\rag_ablation_master_checkpoint.sqlite3,excluded file type

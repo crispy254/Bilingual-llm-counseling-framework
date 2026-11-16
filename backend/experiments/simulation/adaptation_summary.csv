@@ -1,0 +1,222 @@
+experiment,metric,mean,ci95_half_width,n_seeds
+ours: measured confusion,linucb_cumulative_reward,563.92,67.06917600062036,50
+ours: measured confusion,linucb_mean_reward_last200,0.31620000000000004,0.043775617252408576,50
+ours: measured confusion,linucb_feedback_observed_rate,1.0,0.0,50
+ours: measured confusion,linucb_execution_adherence,0.81442,0.006882633383475857,50
+ours: measured confusion,linucb_mean_expected_reward,0.2845370615883721,0.03456353730903364,50
+ours: measured confusion,linucb_final_policy_expected_reward,0.32221577576859156,0.03417954488169265,50
+ours: measured confusion,linucb_final_policy_preferred_agreement,0.7258333333333334,0.03409331681818018,50
+ours: measured confusion,best_fixed_strategy_index,1.86,0.3092502722063638,50
+ours: measured confusion,best_fixed_expected_reward,0.18234191391750712,0.04080488114477164,50
+ours: measured confusion,fixed_average_expected_reward,-0.009993701662497476,0.035542274098562816,50
+ours: measured confusion,random_expected_reward,-0.009993701662497476,0.035542274098562816,50
+ours: measured confusion,oracle_expected_reward,0.3659912680637323,0.034266281531396325,50
+ours: measured confusion,gain_vs_best_fixed,0.13987386185108439,0.023453170495730105,50
+ours: measured confusion,gain_vs_fixed_average,0.33220947743108903,0.0191957944720835,50
+ours: measured confusion,gain_vs_random,0.33220947743108903,0.0191957944720835,50
+ours: measured confusion,gap_to_oracle,0.04377549229514079,0.008261536863598243,50
+ours: measured confusion,seed,24.5,4.142845482654755,50
+ours+guard: measured confusion,linucb_cumulative_reward,634.92,65.79514749153951,50
+ours+guard: measured confusion,linucb_mean_reward_last200,0.3516,0.041305369222224775,50
+ours+guard: measured confusion,linucb_feedback_observed_rate,1.0,0.0,50
+ours+guard: measured confusion,linucb_execution_adherence,0.85402,0.006815766201174748,50
+ours+guard: measured confusion,linucb_mean_expected_reward,0.3181368021077366,0.03400789972886157,50
+ours+guard: measured confusion,linucb_final_policy_expected_reward,0.3516707213237483,0.034339465266633895,50
+ours+guard: measured confusion,linucb_final_policy_preferred_agreement,0.7474999999999998,0.03275075866508313,50
+ours+guard: measured confusion,best_fixed_strategy_index,1.78,0.3159991124687346,50
+ours+guard: measured confusion,best_fixed_expected_reward,0.19617344297513953,0.0414113780924331,50
+ours+guard: measured confusion,fixed_average_expected_reward,-0.010241079985731412,0.03522725004934474,50
+ours+guard: measured confusion,random_expected_reward,-0.010241079985731412,0.03522725004934474,50
+ours+guard: measured confusion,oracle_expected_reward,0.39171010703588627,0.03396253805972206,50
+ours+guard: measured confusion,gain_vs_best_fixed,0.15549727834860883,0.02251123277793354,50
+ours+guard: measured confusion,gain_vs_fixed_average,0.3619118013094797,0.020155109575572688,50
+ours+guard: measured confusion,gain_vs_random,0.3619118013094797,0.020155109575572688,50
+ours+guard: measured confusion,gap_to_oracle,0.04003938571213791,0.007287945627651141,50
+ours+guard: measured confusion,seed,24.5,4.142845482654755,50
+gemma3:4b: measured confusion,linucb_cumulative_reward,424.08,73.37478626323131,50
+gemma3:4b: measured confusion,linucb_mean_reward_last200,0.2462,0.045796185307941634,50
+gemma3:4b: measured confusion,linucb_feedback_observed_rate,1.0,0.0,50
+gemma3:4b: measured confusion,linucb_execution_adherence,0.7164500000000001,0.01750418098069774,50
+gemma3:4b: measured confusion,linucb_mean_expected_reward,0.2137345263546775,0.03859418295075621,50
+gemma3:4b: measured confusion,linucb_final_policy_expected_reward,0.2507000942173805,0.03747592427815888,50
+gemma3:4b: measured confusion,linucb_final_policy_preferred_agreement,0.6483333333333334,0.030370616917424518,50
+gemma3:4b: measured confusion,best_fixed_strategy_index,1.34,0.296182001385532,50
+gemma3:4b: measured confusion,best_fixed_expected_reward,0.13155769471505493,0.038656193371985566,50
+gemma3:4b: measured confusion,fixed_average_expected_reward,-0.014197659727666574,0.03644246804042961,50
+gemma3:4b: measured confusion,random_expected_reward,-0.014197659727666574,0.03644246804042961,50
+gemma3:4b: measured confusion,oracle_expected_reward,0.29261097727951146,0.03656281279755834,50
+gemma3:4b: measured confusion,gain_vs_best_fixed,0.11914239950232561,0.018996367779707597,50
+gemma3:4b: measured confusion,gain_vs_fixed_average,0.2648977539450471,0.015930154349939583,50
+gemma3:4b: measured confusion,gain_vs_random,0.2648977539450471,0.015930154349939583,50
+gemma3:4b: measured confusion,gap_to_oracle,0.041910883062130956,0.006499840406406611,50
+gemma3:4b: measured confusion,seed,24.5,4.142845482654755,50
+gemma3:4b+guard: measured confusion,linucb_cumulative_reward,458.72,70.01281680761214,50
+gemma3:4b+guard: measured confusion,linucb_mean_reward_last200,0.267,0.04366764326917784,50
+gemma3:4b+guard: measured confusion,linucb_feedback_observed_rate,1.0,0.0,50
+gemma3:4b+guard: measured confusion,linucb_execution_adherence,0.73842,0.018317920728678463,50
+gemma3:4b+guard: measured confusion,linucb_mean_expected_reward,0.23029360087418407,0.03722993738524203,50
+gemma3:4b+guard: measured confusion,linucb_final_policy_expected_reward,0.26186930023906513,0.03657483910107329,50
+gemma3:4b+guard: measured confusion,linucb_final_policy_preferred_agreement,0.6533333333333333,0.03701888522238464,50
+gemma3:4b+guard: measured confusion,best_fixed_strategy_index,1.38,0.303221843154574,50
+gemma3:4b+guard: measured confusion,best_fixed_expected_reward,0.13782275623928114,0.03944235333102329,50
+gemma3:4b+guard: measured confusion,fixed_average_expected_reward,-0.01371890668795095,0.03565774854731401,50
+gemma3:4b+guard: measured confusion,random_expected_reward,-0.01371890668795095,0.03565774854731401,50
+gemma3:4b+guard: measured confusion,oracle_expected_reward,0.30748127187553154,0.03621539567618998,50
+gemma3:4b+guard: measured confusion,gain_vs_best_fixed,0.12404654399978395,0.01904308102430113,50
+gemma3:4b+guard: measured confusion,gain_vs_fixed_average,0.2755882069270161,0.017649824070296003,50
+gemma3:4b+guard: measured confusion,gain_vs_random,0.2755882069270161,0.017649824070296003,50
+gemma3:4b+guard: measured confusion,gap_to_oracle,0.045611971636466485,0.008382640352262596,50
+gemma3:4b+guard: measured confusion,seed,24.5,4.142845482654755,50
+qwen2.5:3b: measured confusion,linucb_cumulative_reward,106.76,97.94139164075072,50
+qwen2.5:3b: measured confusion,linucb_mean_reward_last200,0.0726,0.05371064322205922,50
+qwen2.5:3b: measured confusion,linucb_feedback_observed_rate,1.0,0.0,50
+qwen2.5:3b: measured confusion,linucb_execution_adherence,0.39720999999999995,0.022233269850786407,50
+qwen2.5:3b: measured confusion,linucb_mean_expected_reward,0.0550664224116927,0.049222388157107826,50
+qwen2.5:3b: measured confusion,linucb_final_policy_expected_reward,0.07391901228638421,0.047852958140871336,50
+qwen2.5:3b: measured confusion,linucb_final_policy_preferred_agreement,0.40666666666666673,0.043033076724721994,50
+qwen2.5:3b: measured confusion,best_fixed_strategy_index,1.36,0.20509806515728443,50
+qwen2.5:3b: measured confusion,best_fixed_expected_reward,0.05327945498879274,0.047472938708607616,50
+qwen2.5:3b: measured confusion,fixed_average_expected_reward,-0.01451104143808834,0.05008393658881249,50
+qwen2.5:3b: measured confusion,random_expected_reward,-0.01451104143808834,0.05008393658881249,50
+qwen2.5:3b: measured confusion,oracle_expected_reward,0.1229267617141336,0.04853051720456104,50
+qwen2.5:3b: measured confusion,gain_vs_best_fixed,0.02063955729759148,0.011653351450920038,50
+qwen2.5:3b: measured confusion,gain_vs_fixed_average,0.08843005372447257,0.012410102724361471,50
+qwen2.5:3b: measured confusion,gain_vs_random,0.08843005372447257,0.012410102724361471,50
+qwen2.5:3b: measured confusion,gap_to_oracle,0.049007749427749374,0.0056578314390963004,50
+qwen2.5:3b: measured confusion,seed,24.5,4.142845482654755,50
+exaone3.5:7.8b: measured confusion,linucb_cumulative_reward,36.6,117.42351689870507,50
+exaone3.5:7.8b: measured confusion,linucb_mean_reward_last200,0.034600000000000006,0.06111873689441412,50
+exaone3.5:7.8b: measured confusion,linucb_feedback_observed_rate,1.0,0.0,50
+exaone3.5:7.8b: measured confusion,linucb_execution_adherence,0.37977999999999995,0.03340405803314682,50
+exaone3.5:7.8b: measured confusion,linucb_mean_expected_reward,0.020135401610509574,0.058167725364414335,50
+exaone3.5:7.8b: measured confusion,linucb_final_policy_expected_reward,0.034368133768044984,0.05835296688780512,50
+exaone3.5:7.8b: measured confusion,linucb_final_policy_preferred_agreement,0.4316666666666667,0.036025349981501,50
+exaone3.5:7.8b: measured confusion,best_fixed_strategy_index,1.7,0.22421834777855254,50
+exaone3.5:7.8b: measured confusion,best_fixed_expected_reward,0.03375125962283977,0.05710226471319907,50
+exaone3.5:7.8b: measured confusion,fixed_average_expected_reward,-0.014272489911829356,0.057051248100182396,50
+exaone3.5:7.8b: measured confusion,random_expected_reward,-0.014272489911829356,0.057051248100182396,50
+exaone3.5:7.8b: measured confusion,oracle_expected_reward,0.08208293856029332,0.057540991380300645,50
+exaone3.5:7.8b: measured confusion,gain_vs_best_fixed,0.0006168741452052196,0.008107761404727605,50
+exaone3.5:7.8b: measured confusion,gain_vs_fixed_average,0.048640623679874345,0.006942671547403747,50
+exaone3.5:7.8b: measured confusion,gain_vs_random,0.048640623679874345,0.006942671547403747,50
+exaone3.5:7.8b: measured confusion,gap_to_oracle,0.047714804792248336,0.005246614865711222,50
+exaone3.5:7.8b: measured confusion,seed,24.5,4.142845482654755,50
+sparse_feedback_50pct,linucb_cumulative_reward,521.84,69.39648235758588,50
+sparse_feedback_50pct,linucb_mean_reward_last200,0.3066,0.043981176865512644,50
+sparse_feedback_50pct,linucb_feedback_observed_rate,0.49994000000000005,0.0026395391335443186,50
+sparse_feedback_50pct,linucb_execution_adherence,0.81572,0.006606955394805358,50
+sparse_feedback_50pct,linucb_mean_expected_reward,0.26013078728893024,0.03557888496411096,50
+sparse_feedback_50pct,linucb_final_policy_expected_reward,0.3085716042852375,0.03423792707810997,50
+sparse_feedback_50pct,linucb_final_policy_preferred_agreement,0.6841666666666666,0.03165597219680679,50
+sparse_feedback_50pct,best_fixed_strategy_index,1.86,0.3092502722063638,50
+sparse_feedback_50pct,best_fixed_expected_reward,0.18234191391750712,0.04080488114477164,50
+sparse_feedback_50pct,fixed_average_expected_reward,-0.009993701662497476,0.035542274098562816,50
+sparse_feedback_50pct,random_expected_reward,-0.009993701662497476,0.035542274098562816,50
+sparse_feedback_50pct,oracle_expected_reward,0.3659912680637323,0.034266281531396325,50
+sparse_feedback_50pct,gain_vs_best_fixed,0.1262296903677303,0.019868270101423478,50
+sparse_feedback_50pct,gain_vs_fixed_average,0.31856530594773497,0.019123004286951923,50
+sparse_feedback_50pct,gain_vs_random,0.31856530594773497,0.019123004286951923,50
+sparse_feedback_50pct,gap_to_oracle,0.05741966377849488,0.008251988203332701,50
+sparse_feedback_50pct,seed,24.5,4.142845482654755,50
+sparse_feedback_25pct,linucb_cumulative_reward,454.6,72.43235221736626,50
+sparse_feedback_25pct,linucb_mean_reward_last200,0.291,0.046766206471725455,50
+sparse_feedback_25pct,linucb_feedback_observed_rate,0.25172,0.0021176392546404235,50
+sparse_feedback_25pct,linucb_execution_adherence,0.8172800000000001,0.005861973419396805,50
+sparse_feedback_25pct,linucb_mean_expected_reward,0.22936277920941667,0.0368702768889844,50
+sparse_feedback_25pct,linucb_final_policy_expected_reward,0.2992805507773964,0.03848213386020246,50
+sparse_feedback_25pct,linucb_final_policy_preferred_agreement,0.6358333333333333,0.035388207697111033,50
+sparse_feedback_25pct,best_fixed_strategy_index,1.86,0.3092502722063638,50
+sparse_feedback_25pct,best_fixed_expected_reward,0.18234191391750712,0.04080488114477164,50
+sparse_feedback_25pct,fixed_average_expected_reward,-0.009993701662497476,0.035542274098562816,50
+sparse_feedback_25pct,random_expected_reward,-0.009993701662497476,0.035542274098562816,50
+sparse_feedback_25pct,oracle_expected_reward,0.3659912680637323,0.034266281531396325,50
+sparse_feedback_25pct,gain_vs_best_fixed,0.11693863685988928,0.020211204840270603,50
+sparse_feedback_25pct,gain_vs_fixed_average,0.3092742524398939,0.020151767645003912,50
+sparse_feedback_25pct,gain_vs_random,0.3092742524398939,0.020151767645003912,50
+sparse_feedback_25pct,gap_to_oracle,0.0667107172863359,0.008790916451400765,50
+sparse_feedback_25pct,seed,24.5,4.142845482654755,50
+noisy_feedback_10pct,linucb_cumulative_reward,423.92,61.35514585694371,50
+noisy_feedback_10pct,linucb_mean_reward_last200,0.245,0.03667130686267468,50
+noisy_feedback_10pct,linucb_feedback_observed_rate,1.0,0.0,50
+noisy_feedback_10pct,linucb_execution_adherence,0.8107,0.007100337959691909,50
+noisy_feedback_10pct,linucb_mean_expected_reward,0.26639477219643504,0.03859219867527401,50
+noisy_feedback_10pct,linucb_final_policy_expected_reward,0.3054762153505311,0.03566894924331953,50
+noisy_feedback_10pct,linucb_final_policy_preferred_agreement,0.6916666666666665,0.037522566677168495,50
+noisy_feedback_10pct,best_fixed_strategy_index,1.86,0.3092502722063638,50
+noisy_feedback_10pct,best_fixed_expected_reward,0.18234191391750712,0.04080488114477164,50
+noisy_feedback_10pct,fixed_average_expected_reward,-0.009993701662497476,0.035542274098562816,50
+noisy_feedback_10pct,random_expected_reward,-0.009993701662497476,0.035542274098562816,50
+noisy_feedback_10pct,oracle_expected_reward,0.3659912680637323,0.034266281531396325,50
+noisy_feedback_10pct,gain_vs_best_fixed,0.12313430143302394,0.023089124712396825,50
+noisy_feedback_10pct,gain_vs_fixed_average,0.31546991701302857,0.021690606578269267,50
+noisy_feedback_10pct,gain_vs_random,0.31546991701302857,0.021690606578269267,50
+noisy_feedback_10pct,gap_to_oracle,0.06051505271320126,0.011209986346366713,50
+noisy_feedback_10pct,seed,24.5,4.142845482654755,50
+noisy_feedback_20pct,linucb_cumulative_reward,267.0,44.22664690303959,50
+noisy_feedback_20pct,linucb_mean_reward_last200,0.1592,0.030015344273213642,50
+noisy_feedback_20pct,linucb_feedback_observed_rate,1.0,0.0,50
+noisy_feedback_20pct,linucb_execution_adherence,0.81312,0.006411359404147159,50
+noisy_feedback_20pct,linucb_mean_expected_reward,0.22162797400238254,0.03607675725238811,50
+noisy_feedback_20pct,linucb_final_policy_expected_reward,0.2710098885307754,0.036060764166809145,50
+noisy_feedback_20pct,linucb_final_policy_preferred_agreement,0.6075,0.035732634426394884,50
+noisy_feedback_20pct,best_fixed_strategy_index,1.86,0.3092502722063638,50
+noisy_feedback_20pct,best_fixed_expected_reward,0.18234191391750712,0.04080488114477164,50
+noisy_feedback_20pct,fixed_average_expected_reward,-0.009993701662497476,0.035542274098562816,50
+noisy_feedback_20pct,random_expected_reward,-0.009993701662497476,0.035542274098562816,50
+noisy_feedback_20pct,oracle_expected_reward,0.3659912680637323,0.034266281531396325,50
+noisy_feedback_20pct,gain_vs_best_fixed,0.08866797461326822,0.022560092994021518,50
+noisy_feedback_20pct,gain_vs_fixed_average,0.28100359019327287,0.022506152905306373,50
+noisy_feedback_20pct,gain_vs_random,0.28100359019327287,0.022506152905306373,50
+noisy_feedback_20pct,gap_to_oracle,0.09498137953295696,0.01399338929780985,50
+noisy_feedback_20pct,seed,24.5,4.142845482654755,50
+preference_drift_every_500,linucb_cumulative_reward,205.24,42.36241875838531,50
+preference_drift_every_500,linucb_mean_reward_last200,0.0964,0.04082126851515745,50
+preference_drift_every_500,linucb_feedback_observed_rate,1.0,0.0,50
+preference_drift_every_500,linucb_execution_adherence,0.8162400000000001,0.005731172712510029,50
+preference_drift_every_500,linucb_mean_expected_reward,0.1022921417349343,0.020419234670163225,50
+preference_drift_every_500,linucb_final_policy_expected_reward,0.11168684193636773,0.04216571196691069,50
+preference_drift_every_500,linucb_final_policy_preferred_agreement,0.35666666666666663,0.04046964996271635,50
+preference_drift_every_500,best_fixed_strategy_index,1.54,0.2825098671370054,50
+preference_drift_every_500,best_fixed_expected_reward,0.16916750573177083,0.04027064106137996,50
+preference_drift_every_500,fixed_average_expected_reward,-0.0008140646550501226,0.028987149409140194,50
+preference_drift_every_500,random_expected_reward,-0.0008140646550501226,0.028987149409140194,50
+preference_drift_every_500,oracle_expected_reward,0.38165619963262487,0.030900850833150733,50
+preference_drift_every_500,gain_vs_best_fixed,-0.0574806637954031,0.0340226097022309,50
+preference_drift_every_500,gain_vs_fixed_average,0.11250090659141782,0.027648335919627256,50
+preference_drift_every_500,gain_vs_random,0.11250090659141782,0.027648335919627256,50
+preference_drift_every_500,gap_to_oracle,0.2699693576962571,0.027040049047405174,50
+preference_drift_every_500,seed,24.5,4.142845482654755,50
+preference_drift_every_250,linucb_cumulative_reward,121.8,27.009963009232848,50
+preference_drift_every_250,linucb_mean_reward_last200,0.008799999999999997,0.0461002133670802,50
+preference_drift_every_250,linucb_feedback_observed_rate,1.0,0.0,50
+preference_drift_every_250,linucb_execution_adherence,0.81466,0.006660148108149891,50
+preference_drift_every_250,linucb_mean_expected_reward,0.06118689922325812,0.014555738417097472,50
+preference_drift_every_250,linucb_final_policy_expected_reward,0.016983319152428993,0.042550634571101274,50
+preference_drift_every_250,linucb_final_policy_preferred_agreement,0.29083333333333333,0.03544315334448923,50
+preference_drift_every_250,best_fixed_strategy_index,1.48,0.3104737664936092,50
+preference_drift_every_250,best_fixed_expected_reward,0.1427304220932469,0.038001412974340495,50
+preference_drift_every_250,fixed_average_expected_reward,-0.02664600168967152,0.0334607860697212,50
+preference_drift_every_250,random_expected_reward,-0.02664600168967152,0.0334607860697212,50
+preference_drift_every_250,oracle_expected_reward,0.34435849856304523,0.03043466865292254,50
+preference_drift_every_250,gain_vs_best_fixed,-0.12574710294081787,0.035227559851807554,50
+preference_drift_every_250,gain_vs_fixed_average,0.043629320842100514,0.02824113123997709,50
+preference_drift_every_250,gain_vs_random,0.043629320842100514,0.02824113123997709,50
+preference_drift_every_250,gap_to_oracle,0.32737517941061617,0.029750663917155435,50
+preference_drift_every_250,seed,24.5,4.142845482654755,50
+combined_sparse_noisy_drift,linucb_cumulative_reward,105.4,35.62156554636095,50
+combined_sparse_noisy_drift,linucb_mean_reward_last200,0.05400000000000001,0.03371963177174788,50
+combined_sparse_noisy_drift,linucb_feedback_observed_rate,0.49994000000000005,0.0026395391335443186,50
+combined_sparse_noisy_drift,linucb_execution_adherence,0.8123600000000002,0.0051499085882044885,50
+combined_sparse_noisy_drift,linucb_mean_expected_reward,0.06542359420710954,0.01998163236751797,50
+combined_sparse_noisy_drift,linucb_final_policy_expected_reward,0.0663414286910596,0.03549342219869749,50
+combined_sparse_noisy_drift,linucb_final_policy_preferred_agreement,0.3075,0.034988089170645165,50
+combined_sparse_noisy_drift,best_fixed_strategy_index,1.54,0.2825098671370054,50
+combined_sparse_noisy_drift,best_fixed_expected_reward,0.16916750573177083,0.04027064106137996,50
+combined_sparse_noisy_drift,fixed_average_expected_reward,-0.0008140646550501226,0.028987149409140194,50
+combined_sparse_noisy_drift,random_expected_reward,-0.0008140646550501226,0.028987149409140194,50
+combined_sparse_noisy_drift,oracle_expected_reward,0.38165619963262487,0.030900850833150733,50
+combined_sparse_noisy_drift,gain_vs_best_fixed,-0.10282607704071121,0.03545082007749396,50
+combined_sparse_noisy_drift,gain_vs_fixed_average,0.06715549334610972,0.023918100677676222,50
+combined_sparse_noisy_drift,gain_vs_random,0.06715549334610972,0.023918100677676222,50
+combined_sparse_noisy_drift,gap_to_oracle,0.31531477094156524,0.02703988256145037,50
+combined_sparse_noisy_drift,seed,24.5,4.142845482654755,50

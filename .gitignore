@@ -7,3 +7,54 @@ __pycache__/
 chroma_store/
 app.db
 node_modules/
+# Private human annotation keys
+backend/experiments/human_annotation/private/
+backend/experiments/rag/rag_review_private_key.csv
+# Private research datasets
+backend/experiments/data_source/
+backend/experiments/rag/rag_exp/
+
+# Raw human annotation data
+backend/experiments/human_annotation/*.xlsx
+backend/experiments/human_annotation/**/*.xlsx
+backend/experiments/human_annotation/*.csv
+backend/experiments/human_annotation/**/*.csv
+backend/experiments/human_annotation/**/*.txt
+backend/experiments/human_annotation/**/rater_packets_small/
+backend/experiments/human_annotation/**/results/
+
+# Raw comparative evaluation outputs
+backend/experiments/comparative_evaluation/compact_failure_examples.csv
+backend/experiments/comparative_evaluation/compact_failure_examples.txt
+backend/experiments/comparative_evaluation/judge_vs_esconv.csv
+backend/experiments/comparative_evaluation/paper_failure_samples.csv
+backend/experiments/comparative_evaluation/run2_failure_samples.csv
+backend/experiments/comparative_evaluation/run2_generations.csv
+backend/experiments/comparative_evaluation/run2_judged.csv
+
+# Generated context-error outputs
+backend/experiments/context_error/exp_a_out/
+backend/experiments/context_error/exp_b_out/
+
+# Private crisis evaluation datasets
+backend/experiments/crisis/*.csv
+
+# Raw RAG evaluation and annotation outputs
+backend/experiments/rag/rag_ablation_generations.csv
+backend/experiments/rag/rag_ablation_judged.csv
+backend/experiments/rag/rag_ablation_judged_v2.csv
+backend/experiments/rag/rag_ablation_judged_v2_errors.log
+backend/experiments/rag/rag_ablation_pair_results.csv
+backend/experiments/rag/rag_faithfulness_separate.csv
+backend/experiments/rag/rag_passage_relevance*.xlsx
+backend/experiments/rag/rag_response_relevance_blind.csv
+backend/experiments/rag/rag_retrieval_relevance_separate.csv
+backend/experiments/rag/rag_review_all_conditions_judged.csv
+backend/experiments/rag/rag_review_hard_cases_generations.csv
+backend/experiments/rag/rag_review_human_reviewer_*.xlsx
+backend/experiments/rag/rag_review_kb_inventory.csv
+backend/experiments/rag/rag_safety_separate.csv
+
+# Simulation raw outputs
+backend/experiments/simulation/*.npz
+backend/experiments/simulation/*seed_results.csv

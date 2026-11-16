@@ -1,0 +1,15 @@
+{
+"knowledge_base_path": "backend/system/knowledge_base",  "document_count": 4,
+  "total_characters": 10198,
+  "total_words_whitespace_split": 1592,
+  "total_bytes": 10302,
+  "documents_by_category": {
+    "career_employment": 1,
+    "stress_psychology": 2,
+    "university_info": 1
+  },
+  "documents_by_language_indicator": {
+    "en": 4
+  },
+  "note": "Language is a character-based indicator, not a validated label. Fill the *_TO_FILL columns of the inventory manually (source, author, curation, licence); file counts do not establish source quality or licensing."
+}

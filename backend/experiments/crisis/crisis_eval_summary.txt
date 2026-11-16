@@ -1,0 +1,107 @@
+==========================================================================
+PART A [dev] crisis_eval_set_v1.csv  (crisis=40, non-crisis=60)
+==========================================================================
+-- detector: v1_original
+  OVERALL   TP=11 FN=29 FP=9  TN=51 | sens 11/40=27.5% (CI 16.1-42.8) | spec 51/60=85.0% (CI 73.9-91.9)
+  lang=en   TP=4  FN=12 FP=3  TN=21 | sens 4/16=25.0% (CI 10.2-49.5) | spec 21/24=87.5% (CI 69.0-95.7)
+  lang=ko   TP=3  FN=13 FP=4  TN=20 | sens 3/16=18.8% (CI 6.6-43.0) | spec 20/24=83.3% (CI 64.1-93.3)
+  lang=cs   TP=4  FN=4  FP=2  TN=10 | sens 4/8=50.0% (CI 21.5-78.5) | spec 10/12=83.3% (CI 55.2-95.3)
+-- detector: v2_no_guard
+  OVERALL   TP=40 FN=0  FP=13 TN=47 | sens 40/40=100.0% (CI 91.2-100.0) | spec 47/60=78.3% (CI 66.4-86.9)
+  lang=en   TP=16 FN=0  FP=5  TN=19 | sens 16/16=100.0% (CI 80.6-100.0) | spec 19/24=79.2% (CI 59.5-90.8)
+  lang=ko   TP=16 FN=0  FP=5  TN=19 | sens 16/16=100.0% (CI 80.6-100.0) | spec 19/24=79.2% (CI 59.5-90.8)
+  lang=cs   TP=8  FN=0  FP=3  TN=9  | sens 8/8=100.0% (CI 67.6-100.0) | spec 9/12=75.0% (CI 46.8-91.1)
+-- detector: v2_final
+  OVERALL   TP=40 FN=0  FP=0  TN=60 | sens 40/40=100.0% (CI 91.2-100.0) | spec 60/60=100.0% (CI 94.0-100.0)
+  lang=en   TP=16 FN=0  FP=0  TN=24 | sens 16/16=100.0% (CI 80.6-100.0) | spec 24/24=100.0% (CI 86.2-100.0)
+  lang=ko   TP=16 FN=0  FP=0  TN=24 | sens 16/16=100.0% (CI 80.6-100.0) | spec 24/24=100.0% (CI 86.2-100.0)
+  lang=cs   TP=8  FN=0  FP=0  TN=12 | sens 8/8=100.0% (CI 67.6-100.0) | spec 12/12=100.0% (CI 75.7-100.0)
+
+By category, v1_original -> v2_final (crisis cats: recall; non-crisis cats: false-positive rate):
+  code_switch              recall  4/8=50.0% (CI 21.5-78.5)  ->  8/8=100.0% (CI 67.6-100.0)
+  explicit                 recall  7/12=58.3% (CI 32.0-80.7)  ->  12/12=100.0% (CI 75.7-100.0)
+  figurative               FP rate 1/15=6.7% (CI 1.2-29.8)  ->  0/15=0.0% (CI 0.0-20.4)
+  hard_negative_distress   FP rate 0/15=0.0% (CI 0.0-20.4)  ->  0/15=0.0% (CI 0.0-20.4)
+  indirect                 recall  0/12=0.0% (CI 0.0-24.3)  ->  12/12=100.0% (CI 75.7-100.0)
+  negation                 FP rate 8/15=53.3% (CI 30.1-75.2)  ->  0/15=0.0% (CI 0.0-20.4)
+  ordinary                 FP rate 0/15=0.0% (CI 0.0-20.4)  ->  0/15=0.0% (CI 0.0-20.4)
+  passive                  recall  0/8=0.0% (CI 0.0-32.4)  ->  8/8=100.0% (CI 67.6-100.0)
+
+v2_final FALSE NEGATIVES:
+v2_final FALSE POSITIVES:
+
+--------------------------------------------------------------------------
+PART B [dev] end-to-end routing via chatbot_engine.handle_message (installed detector)
+--------------------------------------------------------------------------
+Crisis messages sent to the fixed-response pathway: 40/40=100.0% (CI 91.2-100.0)
+  of those: no bandit call, no strategy, correct-language fixed response: 40/40=100.0% (CI 91.2-100.0)
+Non-crisis messages wrongly sent to the crisis pathway: 0/60=0.0% (CI 0.0-6.0)
+Non-crisis messages reaching the bandit: 19/60=31.7% (CI 21.3-44.2); by intent: {'general': 35, 'career_anxiety': 11, 'emotional_checkin': 4, 'gpa': 3, 'study_plan': 3, 'stress_academic': 2, 'stress_interpersonal': 2}
+==========================================================================
+PART A [heldout] crisis_eval_set_v2_heldout.csv  (crisis=40, non-crisis=60)
+==========================================================================
+-- detector: v1_original
+  OVERALL   TP=8  FN=32 FP=10 TN=50 | sens 8/40=20.0% (CI 10.5-34.8) | spec 50/60=83.3% (CI 72.0-90.7)
+  lang=en   TP=4  FN=11 FP=5  TN=19 | sens 4/15=26.7% (CI 10.9-52.0) | spec 19/24=79.2% (CI 59.5-90.8)
+  lang=ko   TP=3  FN=12 FP=3  TN=21 | sens 3/15=20.0% (CI 7.0-45.2) | spec 21/24=87.5% (CI 69.0-95.7)
+  lang=cs   TP=1  FN=9  FP=2  TN=10 | sens 1/10=10.0% (CI 1.8-40.4) | spec 10/12=83.3% (CI 55.2-95.3)
+-- detector: v2_no_guard
+  OVERALL   TP=40 FN=0  FP=11 TN=49 | sens 40/40=100.0% (CI 91.2-100.0) | spec 49/60=81.7% (CI 70.1-89.4)
+  lang=en   TP=15 FN=0  FP=5  TN=19 | sens 15/15=100.0% (CI 79.6-100.0) | spec 19/24=79.2% (CI 59.5-90.8)
+  lang=ko   TP=15 FN=0  FP=3  TN=21 | sens 15/15=100.0% (CI 79.6-100.0) | spec 21/24=87.5% (CI 69.0-95.7)
+  lang=cs   TP=10 FN=0  FP=3  TN=9  | sens 10/10=100.0% (CI 72.2-100.0) | spec 9/12=75.0% (CI 46.8-91.1)
+-- detector: v2_final
+  OVERALL   TP=39 FN=1  FP=0  TN=60 | sens 39/40=97.5% (CI 87.1-99.6) | spec 60/60=100.0% (CI 94.0-100.0)
+  lang=en   TP=14 FN=1  FP=0  TN=24 | sens 14/15=93.3% (CI 70.2-98.8) | spec 24/24=100.0% (CI 86.2-100.0)
+  lang=ko   TP=15 FN=0  FP=0  TN=24 | sens 15/15=100.0% (CI 79.6-100.0) | spec 24/24=100.0% (CI 86.2-100.0)
+  lang=cs   TP=10 FN=0  FP=0  TN=12 | sens 10/10=100.0% (CI 72.2-100.0) | spec 12/12=100.0% (CI 75.7-100.0)
+
+By category, v1_original -> v2_final (crisis cats: recall; non-crisis cats: false-positive rate):
+  code_switch              recall  1/10=10.0% (CI 1.8-40.4)  ->  10/10=100.0% (CI 72.2-100.0)
+  explicit                 recall  2/8=25.0% (CI 7.1-59.1)  ->  8/8=100.0% (CI 67.6-100.0)
+  figurative               FP rate 0/15=0.0% (CI 0.0-20.4)  ->  0/15=0.0% (CI 0.0-20.4)
+  hard_negative_distress   FP rate 0/15=0.0% (CI 0.0-20.4)  ->  0/15=0.0% (CI 0.0-20.4)
+  indirect                 recall  0/8=0.0% (CI 0.0-32.4)  ->  8/8=100.0% (CI 67.6-100.0)
+  negation                 FP rate 10/15=66.7% (CI 41.7-84.8)  ->  0/15=0.0% (CI 0.0-20.4)
+  negation_mixed           recall  5/6=83.3% (CI 43.6-97.0)  ->  5/6=83.3% (CI 43.6-97.0)
+  ordinary                 FP rate 0/15=0.0% (CI 0.0-20.4)  ->  0/15=0.0% (CI 0.0-20.4)
+  passive                  recall  0/8=0.0% (CI 0.0-32.4)  ->  8/8=100.0% (CI 67.6-100.0)
+
+v2_final FALSE NEGATIVES:
+v2_final FALSE POSITIVES:
+
+--------------------------------------------------------------------------
+PART B [heldout] end-to-end routing via chatbot_engine.handle_message (installed detector)
+--------------------------------------------------------------------------
+Crisis messages sent to the fixed-response pathway: 39/40=97.5% (CI 87.1-99.6)
+  of those: no bandit call, no strategy, correct-language fixed response: 39/39=100.0% (CI 91.0-100.0)
+Non-crisis messages wrongly sent to the crisis pathway: 0/60=0.0% (CI 0.0-6.0)
+Missed crisis messages (1) went to: {'general': 1}; reached bandit: 0
+Non-crisis messages reaching the bandit: 11/60=18.3% (CI 10.6-29.9); by intent: {'general': 48, 'emotional_checkin': 6, 'career_anxiety': 3, 'stress_academic': 2, 'gpa': 1}
+
+==========================================================================
+PART C - emotion/stress detection on the evaluation messages
+==========================================================================
+OVERALL    n=144 emotion 44/144=30.6% (CI 23.6-38.5) | stress 73/144=50.7% (CI 42.6-58.7) | joint 22/144=15.3% (CI 10.3-22.0)
+lang=en    n=72 emotion 18/72=25.0% (CI 16.4-36.1) | stress 43/72=59.7% (CI 48.2-70.3) | joint 10/72=13.9% (CI 7.7-23.7)
+lang=ko    n=72 emotion 26/72=36.1% (CI 26.0-47.6) | stress 30/72=41.7% (CI 31.0-53.2) | joint 12/72=16.7% (CI 9.8-26.9)
+Flagged as crisis (all are non-crisis messages): 0/144=0.0% (CI 0.0-2.6)
+Reach the bandit through intent routing: 77/144=53.5% (CI 45.3-61.4); intents: {'general': 65, 'emotional_checkin': 37, 'stress_academic': 20, 'career_anxiety': 19, 'stress_interpersonal': 1, 'gpa': 1, 'study_plan': 1}
+
+Emotion confusion (rows=reference, cols=detected):
+pred_emotion  angry  anxious  hopeful  neutral  overwhelmed
+emotion
+angry             5        1        0       13            5
+anxious           0       15        0        4            5
+hopeful           0        4        7       12            1
+neutral           0        5        0       15            4
+overwhelmed       0        1        0       21            2
+sad               1        3        0       14            6
+
+Stress confusion (rows=reference, cols=detected):
+pred_stress    academic  career  general  interpersonal
+stress_type
+academic             27       0        9              0
+career                2      17       17              0
+general              14       0       22              0
+interpersonal         4       0       25              7

@@ -1,0 +1,11 @@
+fig1_cumulative_reward:
+(a) Cumulative EXPECTED reward over 2,000 simulated interactions for the proposed configuration, mean and 95% CI over seeds. Oracle and best-fixed are hindsight baselines; uniform random equals the fixed-strategy average in expectation. (b) Cumulative gain of LinUCB over the best fixed strategy for each model configuration; values below zero mean the fixed strategy was ahead. Rewards are simulated, not student outcomes; execution follows judge-derived confusion matrices.
+
+fig2_strategy_selection_quality:
+Share of interactions in which LinUCB selected the preferred strategy (argmax of the simulated response probability), moving average with 95% CI over seeds, for the six model configurations. Dotted line: random selection (0.25). Execution is imperfect, so the preferred strategy is not always the oracle action.
+
+fig3_adaptation_progress:
+Greedy learned policy at feedback checkpoints (0 = cold start): (a) expected simulated reward (incl. execution confusion), with hindsight reference lines for the proposed configuration; (b) fraction of contexts where the policy matches the preferred strategy. Mean and 95% CI over seeds.
+
+fig4_robustness:
+Proposed configuration under sparse feedback (50/25% observed), noisy feedback (10/20% flipped), preference drift (redrawn every 500/250 interactions) and a combined condition. (a) Mean expected reward per interaction; oracle and best fixed are re-evaluated against the preferences in force. (b) LinUCB advantage over baselines; negative bars show where LinUCB did not beat the best fixed strategy. (c) Selection quality over time; dashed lines mark drift/500 redraws (drift/250 redraws at multiples of 250). Simulated rewards only.
